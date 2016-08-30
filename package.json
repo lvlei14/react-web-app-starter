@@ -1,7 +1,6 @@
 {
-  "name": "worker-partner-web",
+  "name": "react-web-app-starter",
   "version": "0.0.1",
-  "private": true,
   "devDependencies": {
     "react-scripts": "0.2.3"
   },
