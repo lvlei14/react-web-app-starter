@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
+import { Link } from 'react-router';
 import './App.css';
 
 class App extends Component {
@@ -10,9 +11,17 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
         </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <div>
+          <Link to="/">Home</Link>
+          {
+            ['react', 'redux', 'immutable.js'].map((elem) => {
+              return <Link to={`/about/${elem}?elem=${elem}`} key={elem}>{elem}</Link>;
+            })
+          }
+        </div>
+        <div className="App-intro">
+          {this.props.children}
+        </div>
       </div>
     );
   }
