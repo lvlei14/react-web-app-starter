@@ -1,5 +1,5 @@
-import AboutRc from './About/About';
-import HomeRc from './Home/Home';
+import HomeRC from './Home';
+import AboutRC from './About';
 
-export const About = AboutRc;
-export const Home = HomeRc;
+export const Home = HomeRC;
+export const About = AboutRC;

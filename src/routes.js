@@ -1,21 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
-import App from './App';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+import App from './containers/App';
 import {
   Home,
   About,
 } from './containers';
 
-export default class Routers extends Component {
+// Needed for onTouchTap
+// http://stackoverflow.com/a/34015469/988941
+injectTapEventPlugin();
 
-  render() {
-    return (
-      <Router history={hashHistory}>
-        <Route path="/" component={App}>
-          <IndexRoute component={Home} />
-          <Route path="about/:id" component={About} />
-        </Route>
-      </Router>
-    )
-  }
-}
+export default (
+  <Router history={hashHistory}>
+    <Route path="/" component={App}>
+      <IndexRoute component={Home} />
+      <Route path="about" component={About} />
+    </Route>
+  </Router>
+)
