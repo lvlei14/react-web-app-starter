@@ -16,7 +16,7 @@ function* execHttpActions(action, apiFn, args) {
   const {response, error} = yield call(apiFn, args);
   if(response) {
     yield put( action.success(response) );
-    yield put({type: 'SHOW_ALERT', message: '哈哈'});
+    yield put({type: 'SHOW_ALERT', message: response.message});
   } else {
     yield put( action.failure(error) )
   }
@@ -49,37 +49,33 @@ function* watchCreateTodo() {
   }
 }
 
-// // Fetches data for a Repo: repo data + repo stargazers
-// function* watchLoadRepoPage() {
-//   while(true) {
-//     const {fullName, requiredFields = []} = yield take(actions.LOAD_REPO_PAGE)
-//
-//     yield fork(loadRepo, fullName, requiredFields)
-//     yield fork(loadStargazers, fullName)
-//   }
-// }
-//
-// // Fetches more starred repos, use pagination data from getStarredByUser(login)
-// function* watchLoadMoreStarred() {
-//   while(true) {
-//     const {login} = yield take(actions.LOAD_MORE_STARRED)
-//     yield fork(loadStarred, login, true)
-//   }
-// }
-//
-// function* watchLoadMoreStargazers() {
-//   while(true) {
-//     const {fullName} = yield take(actions.LOAD_MORE_STARGAZERS)
-//     yield fork(loadStargazers, fullName, true)
-//   }
-// }
+function* watchDeleteTodo() {
+  while(true) {
+    const { id } = yield take(todo.DELETE_TODO.type);
+    yield fork(deleteTodo, id);
+  }
+}
+
+function* watchToggleTodo() {
+  while(true) {
+    const { id } = yield take(todo.TOGGLE_TODO.type);
+    yield fork(toggleTodo, id);
+  }
+}
+
+function* watchLoadTodos() {
+  while(true) {
+    yield take(todo.LOAD_TODOS.type);
+    yield fork(loadTodos);
+  }
+}
 
 export default function* root() {
   yield [
     // fork(watchNavigate),
     fork(watchCreateTodo),
-    // fork(watchLoadRepoPage),
-    // fork(watchLoadMoreStarred),
-    // fork(watchLoadMoreStargazers)
+    fork(watchDeleteTodo),
+    fork(watchToggleTodo),
+    fork(watchLoadTodos),
   ]
 }

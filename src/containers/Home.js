@@ -21,13 +21,18 @@ const todoPannelStyle = {
   textAlign: 'center',
 };
 
+const deletedTodoStyle = {textDecoration: "line-through", color: "#ccc"};
+
 
 class Home extends React.Component {
   constructor(props) {
     super(props);
     this.createTodo = this.createTodo.bind(this);
+    this.deleteTodo = this.deleteTodo.bind(this);
+    this.toggleTodoHandle = this.toggleTodoHandle.bind(this);
     this.textInputChanged = this.textInputChanged.bind(this);
     this.handleKeyUp = this.handleKeyUp.bind(this);
+
 
     this.state = {
       textInputValue: '',
@@ -39,9 +44,10 @@ class Home extends React.Component {
     // ReactDOM.findDOMNode(this.refs.taskInput).focus();
   }
 
-  deleteTodo(event) {
+  deleteTodo(event, id) {
     event.preventDefault();
     event.stopPropagation();
+    this.props.deleteTodo(id)
   }
 
   textInputChanged(event) {
@@ -52,7 +58,10 @@ class Home extends React.Component {
 
   createTodo() {
     const { createTodo } = this.props;
-    createTodo(this.state.textInputValue);
+    if (!this.state.textInputValue.trim()) {
+      return;
+    }
+    createTodo(this.state.textInputValue.trim());
   }
 
   handleKeyUp(event) {
@@ -61,12 +70,20 @@ class Home extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  toggleTodoHandle(id, isChecked) {
+    // isChecked not used
+    this.props.toggleTodo(id);
+  }
 
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.createTodoSuccess && nextProps.createTodoSuccess) {
+      this.setState({
+        textInputValue: ''
+      });
+    }
   }
 
   render () {
-    // console.log(this.props);
     const { todos } = this.props;
     return (
       <div>
@@ -85,13 +102,20 @@ class Home extends React.Component {
 
             {/* todo list */}
             <List style={{textAlign: "left", paddingLeft: "-16px"}}>
-              <Subheader>所有|已完成|未完成</Subheader>
+              <Subheader>所有|已完成|未完成|回收站</Subheader>
               {
                 todos.map((todo) => {
                   return  <ListItem primaryText={todo.text}
+                                    style={todo.delete ? deletedTodoStyle : {}}
                                     key={todo.id}
-                                    leftCheckbox={<Checkbox />}
-                                    rightIcon={<DeleteIcon onClick={this.deleteTodo}/>}
+                                    leftCheckbox={
+                                      <Checkbox checked={todo.complete}
+                                                onCheck={(event, isChecked) => this.toggleTodoHandle(todo.id, isChecked)}
+                                      />
+                                    }
+                                    rightIcon={
+                                      <DeleteIcon onClick={(event) => this.deleteTodo(event, todo.id)}/>
+                                    }
                           />
                 })
               }
@@ -105,20 +129,30 @@ class Home extends React.Component {
 }
 
 Home.propTypes = {
-  createTodo: PropTypes.func.isRequired,
+  // props from redux store
   todos: PropTypes.arrayOf({
     text: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
   }).isRequired,
+  createTodoSuccess: PropTypes.bool.isRequired,
   filter: PropTypes.string.isRequired,
+
+  // actions
+  createTodo: PropTypes.func.isRequired,
+  toggleTodo: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
+  loadTodos: PropTypes.func.isRequired,
 };
+
 
 function mapStateToProps(state) {
   return {
     todos: state.todo.todos,
-    filter: state.todo.filter
+    filter: state.todo.filter,
+    createTodoSuccess: state.todo.createTodoSuccess,
   }
 }
+
 
 export default connect(mapStateToProps, {
   ...todoActions
