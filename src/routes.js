@@ -5,6 +5,7 @@ import App from './containers/App';
 import {
   Home,
   About,
+  Register
 } from './containers';
 
 // Needed for onTouchTap
@@ -15,6 +16,7 @@ export default (
   <Router history={hashHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Home} />
+      <Route path="/register" component={Register} />
       <Route path="about" component={About} />
     </Route>
   </Router>
