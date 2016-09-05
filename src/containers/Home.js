@@ -21,6 +21,21 @@ const todoPannelStyle = {
   textAlign: 'center',
 };
 
+const normalFilterStyle = {
+  display: 'inline-block',
+  marginLeft: '7px',
+  fontWeight: '100',
+};
+
+const selectedFilterStyle = {
+  display: 'inline-block',
+  marginLeft: '7px',
+  fontWeight: '500',
+  color: 'rgb(0, 188, 212)'
+};
+
+
+
 const deletedTodoStyle = {textDecoration: "line-through", color: "#ccc"};
 
 
@@ -32,7 +47,7 @@ class Home extends React.Component {
     this.toggleTodoHandle = this.toggleTodoHandle.bind(this);
     this.textInputChanged = this.textInputChanged.bind(this);
     this.handleKeyUp = this.handleKeyUp.bind(this);
-
+    this.genStatusFilterBar = this.genStatusFilterBar.bind(this);
 
     this.state = {
       textInputValue: '',
@@ -83,8 +98,55 @@ class Home extends React.Component {
     }
   }
 
+  filterTodos() {
+    const { filter, todos } = this.props;
+    let filteredTodos = [];
+    if (filter === 'all') {
+      filteredTodos = todos;
+    } else if (filter === 'uncomplete') {
+      filteredTodos = todos.filter((todo) => !todo.complete)
+    } else if (filter === 'completed') {
+      filteredTodos = todos.filter((todo) => todo.complete)
+    } else if (filter === 'deleted') {
+      filteredTodos = todos.filter((todo) => todo.delete)
+    } else {
+      return todos;
+    }
+    return filteredTodos;
+  }
+
+  genStatusFilterBar() {
+    const currentFilter = this.props.filter;
+    const filters = [{
+      status: 'all',
+      label: '全部'
+    }, {
+      status: 'completed',
+      label: '已完成'
+    }, {
+      status: 'uncomplete',
+      label: '未完成'
+    }, {
+      status: 'deleted',
+      label: '回收站'
+    }];
+    return (
+      <div>
+        {
+          filters.map((filter) => {
+            return <div style={currentFilter === filter.status ? selectedFilterStyle: normalFilterStyle}
+                        key={filter.status}
+                        onClick={() => this.props.filterTodo(filter.status)}>
+                        {filter.label}
+                  </div>
+          })
+        }
+      </div>
+    )
+  }
+
   render () {
-    const { todos } = this.props;
+    const filteredTodos = this.filterTodos();
     return (
       <div>
         <Paper style={backgroundPaperStyle} zDepth={1}>
@@ -102,9 +164,11 @@ class Home extends React.Component {
 
             {/* todo list */}
             <List style={{textAlign: "left", paddingLeft: "-16px"}}>
-              <Subheader>所有|已完成|未完成|回收站</Subheader>
+              <Subheader>
+                {this.genStatusFilterBar()}
+              </Subheader>
               {
-                todos.map((todo) => {
+                filteredTodos.map((todo) => {
                   return  <ListItem primaryText={todo.text}
                                     style={todo.delete ? deletedTodoStyle : {}}
                                     key={todo.id}
@@ -142,6 +206,7 @@ Home.propTypes = {
   toggleTodo: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
   loadTodos: PropTypes.func.isRequired,
+  filterTodo: PropTypes.func.isRequired,
 };
 
 

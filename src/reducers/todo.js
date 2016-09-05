@@ -16,7 +16,7 @@ import findIndex from 'lodash/findIndex';
 
 let initState = {
   todos: [],
-  filter: 'all',              // 'all' | 'uncomplete' | 'complete'
+  filter: 'all',              // 'all' | 'uncomplete' | 'completed'|'deleted'
   sort: 'taskHeight',         // 'taskHeight' | 'time',
   createTodoSuccess: false,
   deleteTodoSuccess: false,
@@ -34,6 +34,13 @@ export default function todoReducer(state = initState, action) {
       };
     case todoActions.LOAD_TODOS.FAILURE:
       return state;
+
+    // filter todos
+    case todoActions.FILTER_TODO:
+      return {
+        ...state,
+        filter: action.filter
+      };
 
     // create todos
     case todoActions.CREATE_TODO.REQUEST:

@@ -51,3 +51,9 @@ export const remove = {
 }
 
 export const deleteTodo = (id) => createAction(DELETE_TODO.type, {id});
+
+/**
+ * 筛选  已完成|未完成|所有|回收站
+ */
+export const FILTER_TODO =  'FILTER_TODO';
+export const filterTodo = (filter) => createAction(FILTER_TODO, {filter});
