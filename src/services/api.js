@@ -52,3 +52,15 @@ export const deleteTodo = (id) => callApi(`/api/todos/${id}`, {
     'Accept': 'application/json'
   }
 })
+
+/**
+ * 注册
+ */
+export const register = (registerInfo) => callApi('/api/users', {
+  method: 'POST',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ ...registerInfo })
+})

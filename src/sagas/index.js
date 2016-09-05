@@ -1,7 +1,7 @@
 /* eslint-disable no-constant-condition */
 import { take, put, call, fork, /*select*/ } from 'redux-saga/effects';
 import { api, /*history*/ } from '../services';
-import { todoActions as todo } from '../actions';
+import { todoActions as todo, registerActions as register } from '../actions';
 
 // import { getUser, getRepo, getStarredByUser, getStargazersByRepo } from '../reducers/selectors';
 
@@ -27,6 +27,7 @@ export const createTodo       = execHttpActions.bind(null, todo.create, api.crea
 export const toggleTodo       = execHttpActions.bind(null, todo.toggle, api.toggleTodo);
 export const loadTodos        = execHttpActions.bind(null, todo.load, api.loadTodos);
 export const deleteTodo       = execHttpActions.bind(null, todo.remove, api.deleteTodo);
+export const registerUser         = execHttpActions.bind(null, register.actions, api.register);
 
 
 /******************************************************************************/
@@ -70,6 +71,13 @@ function* watchLoadTodos() {
   }
 }
 
+function* watchRegister() {
+  while(true) {
+    const { registerInfo }= yield take(register.REGISTER.type);
+    yield fork(registerUser, registerInfo);
+  }
+}
+
 export default function* root() {
   yield [
     // fork(watchNavigate),
@@ -77,5 +85,6 @@ export default function* root() {
     fork(watchDeleteTodo),
     fork(watchToggleTodo),
     fork(watchLoadTodos),
+    fork(watchRegister),
   ]
 }
