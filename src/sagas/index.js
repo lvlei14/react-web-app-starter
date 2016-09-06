@@ -20,20 +20,20 @@ function* execHttpActions(action, apiFn, args) {
   const {response, error} = yield call(apiFn, args);
   if(response) {
     yield put( action.success(response) );
-    yield put({type: 'SHOW_ALERT', message: response.message});
+    // yield put({type: 'SHOW_ALERT', message: response.message});
   } else {
     yield put( action.failure(error) )
   }
 }
 
 // yeah! we can also bind Generators
-export const createTodo       = execHttpActions.bind(null, todo.create, api.createTodo);
-export const toggleTodo       = execHttpActions.bind(null, todo.toggle, api.toggleTodo);
-export const loadTodos        = execHttpActions.bind(null, todo.load, api.loadTodos);
-export const deleteTodo       = execHttpActions.bind(null, todo.remove, api.deleteTodo);
-export const registerUser     = execHttpActions.bind(null, register.actions, api.register);
-export const login            = execHttpActions.bind(null, auth.loginActions, api.login);
-
+export const createTodo         = execHttpActions.bind(null, todo.create, api.createTodo);
+export const toggleTodo         = execHttpActions.bind(null, todo.toggle, api.toggleTodo);
+export const loadTodos          = execHttpActions.bind(null, todo.load, api.loadTodos);
+export const deleteTodo         = execHttpActions.bind(null, todo.remove, api.deleteTodo);
+export const registerUser       = execHttpActions.bind(null, register.actions, api.register);
+export const login              = execHttpActions.bind(null, auth.loginActions, api.login);
+export const loadAuthByJwtToken = execHttpActions.bind(null, auth.loadAuthByJwtTokenActions, api.jwtTokenAuth);
 /******************************************************************************/
 /******************************* WATCHERS *************************************/
 /******************************************************************************/
@@ -89,6 +89,13 @@ function* watchLogin() {
   }
 }
 
+function* watchLoadAuthByJwtToken() {
+  while(true) {
+    yield take(auth.LOAD_AUTH_BY_JWTTOKEN.type);
+    yield fork(loadAuthByJwtToken);
+  }
+}
+
 export default function* root() {
   yield [
     // fork(watchNavigate),
@@ -98,5 +105,6 @@ export default function* root() {
     fork(watchLoadTodos),
     fork(watchRegister),
     fork(watchLogin),
+    fork(watchLoadAuthByJwtToken),
   ]
 }

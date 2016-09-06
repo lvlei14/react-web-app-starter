@@ -195,9 +195,11 @@ class Home extends React.Component {
 Home.propTypes = {
   // props from redux store
   todos: PropTypes.arrayOf({
-    text: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
-  }).isRequired,
+    text: PropTypes.string,
+    id: PropTypes.string,
+    complete: PropTypes.bool,
+    delete: PropTypes.bool,
+  }),
   createTodoSuccess: PropTypes.bool.isRequired,
   filter: PropTypes.string.isRequired,
 

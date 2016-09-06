@@ -76,3 +76,14 @@ export const login = (loginUser) => callApi('/api/auth', {
   },
   body: JSON.stringify({ ...loginUser })
 })
+
+/**
+ * auth by jwt token
+ */
+export const jwtTokenAuth = () => callApi('/api/auth', {
+  method: 'GET',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  }
+})
