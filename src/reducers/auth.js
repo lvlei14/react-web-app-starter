@@ -18,11 +18,13 @@ export default function authReducer(state = initState, action) {
         user: null
       };
     case authActions.LOGIN.SUCCESS:
+      const token = action.response && action.response.token;
+      localStorage.setItem('user_token', token);
       return {
         ...state,
         loginSuccess: true,
         user: action.response && action.response.user,
-        token: action.response && action.response.token,
+        token: token,
       };
     case authActions.LOGIN.FAILURE:
       return {

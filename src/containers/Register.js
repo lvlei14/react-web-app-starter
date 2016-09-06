@@ -45,7 +45,6 @@ class Register extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.registerSuccess && nextProps.registerSuccess) {
-      alert('注册成功');
       history.replace('/login');
     }
   }
