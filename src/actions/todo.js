@@ -24,8 +24,10 @@ export const toggle = {
   failure: error => createAction(TOGGLE_TODO.FAILURE, {error}),
 }
 
+export const toggleTodo = (id) => createAction(TOGGLE_TODO.type, {id});
+
 /**
- * 获取所有 todo
+ * 获取所有 todos
  */
 export const LOAD_TODOS = createRequestTypes('LOAD_TODOS');
 
@@ -34,6 +36,8 @@ export const load = {
  success: response => createAction(LOAD_TODOS.SUCCESS, {response}),
  failure: error => createAction(LOAD_TODOS.FAILURE, {error}),
 }
+
+export const loadTodos = () => createAction(LOAD_TODOS.type);
 
 /**
  * 删除
@@ -45,3 +49,11 @@ export const remove = {
   success: response => createAction(DELETE_TODO.SUCCESS, {response}),
   failure: error => createAction(DELETE_TODO.FAILURE, {error}),
 }
+
+export const deleteTodo = (id) => createAction(DELETE_TODO.type, {id});
+
+/**
+ * 筛选  已完成|未完成|所有|回收站
+ */
+export const FILTER_TODO =  'FILTER_TODO';
+export const filterTodo = (filter) => createAction(FILTER_TODO, {filter});
