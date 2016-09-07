@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import { pushState } from 'redux-router';
+import { history } from '../services';
 import { loadAuthByJwtToken } from '../actions/auth';
 
 export default function requireAuthentication(ReactComponent) {
@@ -14,10 +14,12 @@ export default function requireAuthentication(ReactComponent) {
     }
 
     componentWillReceiveProps (nextProps) {
+      let redirectAfterLogin = this.props.location.pathname;
       if (!this.props.loadAuthFailed && nextProps.loadAuthFailed) {
-        let redirectAfterLogin = this.props.location.pathname;
-        // TODO redirectAfterLogin not available
-        this.props.dispatch(pushState(null, `/login?next=${redirectAfterLogin}`));
+        history.replace(`/login?next=${redirectAfterLogin}`);
+      }
+      if (this.props.user && !nextProps.user) {
+        history.replace('/login');
       }
     }
 
@@ -40,7 +42,7 @@ export default function requireAuthentication(ReactComponent) {
   const mapStateToProps = (state) => ({
     loadingAuth: state.auth.loadingAuth,
     loadAuthFailed: state.auth.loadAuthFailed,
-    user: state.auth.user
+    user: state.auth.user,
   });
 
   return connect(mapStateToProps, {

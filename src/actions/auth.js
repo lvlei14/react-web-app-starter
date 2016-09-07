@@ -1,5 +1,6 @@
 import { createRequestTypes, createAction } from './lib';
 
+
 /**
  * 登录
  */
@@ -12,6 +13,14 @@ export const loginActions = {
 }
 
 export const login = (loginUser) => createAction(LOGIN.type, {loginUser});
+
+
+/**
+ * 退出
+ */
+export const LOGOUT = createRequestTypes('LOGOUT');
+export const logout = () => createAction(LOGOUT.type);
+
 
 /**
  * 使用 jwt token 加载用户信息

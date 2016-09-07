@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { navigate, updateRouterState, resetErrorMessage } from '../actions';
+import { navigate, updateRouterState, resetErrorMessage, authActions } from '../actions';
 import Alert from '../components/Alert';
 
 import AppBar from 'material-ui/AppBar';
@@ -16,8 +16,9 @@ import Divider from 'material-ui/Divider';
 class App extends Component {
   constructor(props) {
     super(props)
-    this.handleChange = this.handleChange.bind(this)
-    this.handleDismissClick = this.handleDismissClick.bind(this)
+    this.handleChange = this.handleChange.bind(this);
+    this.handleDismissClick = this.handleDismissClick.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   componentWillMount() {
@@ -55,6 +56,10 @@ class App extends Component {
     )
   }
 
+  logout() {
+    this.props.logout();
+  }
+
   getHeaderRightBars() {
     return (
       <span>
@@ -83,7 +88,7 @@ class App extends Component {
         >
           <MenuItem primaryText="个人信息" />
           <Divider />
-          <MenuItem primaryText="退出" />
+          <MenuItem primaryText="退出" onClick={this.logout}/>
         </IconMenu>
       </span>
     );
@@ -108,7 +113,8 @@ App.propTypes = {
   // Injected by React Redux
 
   // Injected by React Router
-  children: PropTypes.node
+  children: PropTypes.node,
+  logout: PropTypes.func.isRequired,
 }
 
 function mapStateToProps(state) {
@@ -120,5 +126,6 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   navigate,
   updateRouterState,
-  resetErrorMessage
+  resetErrorMessage,
+  logout: authActions.logout
 })(App)

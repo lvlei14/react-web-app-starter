@@ -2,9 +2,9 @@
 // import { camelizeKeys } from 'humps';
 // import merge from 'lodash/merge';
 import 'isomorphic-fetch';
-import { dispatch } from '../index';
-import { history } from '../services';
-import { showAlert } from '../actions/global_alert';
+// import { dispatch } from '../index';
+// import { history } from '../services';
+// import { showAlert } from '../actions/global_alert';
 
 
 // Fetches an API response and normalizes the result JSON according to schema.
@@ -35,11 +35,10 @@ export function callApi(endpoint, options) {
     )
 }
 
+// TODO 更多的处理方式
 function alertByHttpStatusCode(code) {
   switch (code) {
     case 401:
-        dispatch(showAlert('尚未登录，请登录！'));
-        history.replace('/login');
       break;
     // TODO other http status code here
     default:

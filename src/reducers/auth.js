@@ -57,6 +57,13 @@ export default function authReducer(state = initState, action) {
         errMessage: action.error,
         loadAuthFailed: true,
       };
+    case authActions.LOGOUT.type:
+      localStorage.removeItem('user_token');
+      return {
+        ...state,
+        user: null,
+        token: '',
+      }
 
     default:
       return state;

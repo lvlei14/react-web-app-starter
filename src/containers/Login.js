@@ -40,7 +40,13 @@ class Login extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.loginSuccess && nextProps.loginSuccess) {
-      history.replace('/');
+      let { next } = this.props.location.query;
+      if (next) {
+        console.log()
+        history.replace(`${next}`);
+      } else {
+        history.replace('/');
+      }
     }
   }
 
