@@ -47,7 +47,7 @@ export const loadTodos = () => callApi(`/api/todos`, {
  * 删除 todo
  */
 export const deleteTodo = (id) => callApi(`/api/todos/${id}`, {
-  method: 'DELETE',
+  method: 'PUT',
   headers: {
     'Accept': 'application/json'
   }
@@ -75,4 +75,15 @@ export const login = (loginUser) => callApi('/api/auth', {
     'Content-Type': 'application/json'
   },
   body: JSON.stringify({ ...loginUser })
+})
+
+/**
+ * auth by jwt token
+ */
+export const jwtTokenAuth = () => callApi('/api/auth', {
+  method: 'GET',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  }
 })

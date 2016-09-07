@@ -1,3 +1,8 @@
+/**
+ * TODO
+ * 1. 筛选的 hover 态
+ */
+
 import React, { PropTypes }from 'react';
 import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
@@ -31,7 +36,10 @@ const selectedFilterStyle = {
   display: 'inline-block',
   marginLeft: '7px',
   fontWeight: '500',
-  color: 'rgb(0, 188, 212)'
+  color: 'rgb(0, 188, 212)',
+  ':hover': {
+    cursor: "pointer"
+  }
 };
 
 
@@ -56,6 +64,7 @@ class Home extends React.Component {
 
   componentDidMount() {
     this.refs.taskInput.focus();
+    this.props.loadTodos();
     // ReactDOM.findDOMNode(this.refs.taskInput).focus();
   }
 
@@ -104,11 +113,11 @@ class Home extends React.Component {
     if (filter === 'all') {
       filteredTodos = todos;
     } else if (filter === 'uncomplete') {
-      filteredTodos = todos.filter((todo) => !todo.complete)
+      filteredTodos = todos.filter((todo) => !todo.isCompleted)
     } else if (filter === 'completed') {
-      filteredTodos = todos.filter((todo) => todo.complete)
+      filteredTodos = todos.filter((todo) => todo.isCompleted)
     } else if (filter === 'deleted') {
-      filteredTodos = todos.filter((todo) => todo.delete)
+      filteredTodos = todos.filter((todo) => todo.isDeleted)
     } else {
       return todos;
     }
@@ -170,15 +179,15 @@ class Home extends React.Component {
               {
                 filteredTodos.map((todo) => {
                   return  <ListItem primaryText={todo.text}
-                                    style={todo.delete ? deletedTodoStyle : {}}
-                                    key={todo.id}
+                                    style={todo.isDeleted ? deletedTodoStyle : {}}
+                                    key={todo._id}
                                     leftCheckbox={
-                                      <Checkbox checked={todo.complete}
-                                                onCheck={(event, isChecked) => this.toggleTodoHandle(todo.id, isChecked)}
+                                      <Checkbox checked={todo.isCompleted}
+                                                onCheck={(event, isChecked) => this.toggleTodoHandle(todo._id, isChecked)}
                                       />
                                     }
                                     rightIcon={
-                                      <DeleteIcon onClick={(event) => this.deleteTodo(event, todo.id)}/>
+                                      <DeleteIcon onClick={(event) => this.deleteTodo(event, todo._id)}/>
                                     }
                           />
                 })
@@ -195,9 +204,11 @@ class Home extends React.Component {
 Home.propTypes = {
   // props from redux store
   todos: PropTypes.arrayOf({
-    text: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
-  }).isRequired,
+    text: PropTypes.string,
+    id: PropTypes.string,
+    complete: PropTypes.bool,
+    delete: PropTypes.bool,
+  }),
   createTodoSuccess: PropTypes.bool.isRequired,
   filter: PropTypes.string.isRequired,
 

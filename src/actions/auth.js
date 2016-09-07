@@ -1,7 +1,8 @@
 import { createRequestTypes, createAction } from './lib';
 
+
 /**
- * 新建
+ * 登录
  */
 export const LOGIN = createRequestTypes('LOGIN');
 
@@ -12,3 +13,25 @@ export const loginActions = {
 }
 
 export const login = (loginUser) => createAction(LOGIN.type, {loginUser});
+
+
+/**
+ * 退出
+ */
+export const LOGOUT = createRequestTypes('LOGOUT');
+export const logout = () => createAction(LOGOUT.type);
+
+
+/**
+ * 使用 jwt token 加载用户信息
+ */
+export const LOAD_AUTH_BY_JWTTOKEN = createRequestTypes('LOAD_AUTH_BY_JWTTOKEN');
+
+export const loadAuthByJwtTokenActions = {
+  request: () => createAction(LOAD_AUTH_BY_JWTTOKEN.REQUEST),
+  success: response => createAction(LOAD_AUTH_BY_JWTTOKEN.SUCCESS, {response}),
+  failure: error => createAction(LOAD_AUTH_BY_JWTTOKEN.FAILURE, {error}),
+}
+
+export const loadAuthByJwtToken = () => createAction(LOAD_AUTH_BY_JWTTOKEN.type);
+export const isAuthLoaded = (store) => store.user;

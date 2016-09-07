@@ -1,6 +1,7 @@
 import React from 'react';
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+import requireAuthentication from './lib/requireAuthentication';
+
 import App from './containers/App';
 import {
   Home,
@@ -9,16 +10,13 @@ import {
   Login,
 } from './containers';
 
-// Needed for onTouchTap
-// http://stackoverflow.com/a/34015469/988941
-injectTapEventPlugin();
 
 export default (
   <Router history={hashHistory}>
-    <Route path="/" component={App}>
+    <Route path="register" component={Register} />
+    <Route path="login" component={Login} />
+    <Route path="/" component={requireAuthentication(App)}>
       <IndexRoute component={Home} />
-      <Route path="/register" component={Register} />
-      <Route path="/login" component={Login} />
       <Route path="about" component={About} />
     </Route>
   </Router>
