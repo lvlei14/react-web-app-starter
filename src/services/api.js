@@ -47,7 +47,7 @@ export const loadTodos = () => callApi(`/api/todos`, {
  * 删除 todo
  */
 export const deleteTodo = (id) => callApi(`/api/todos/${id}`, {
-  method: 'DELETE',
+  method: 'PUT',
   headers: {
     'Accept': 'application/json'
   }

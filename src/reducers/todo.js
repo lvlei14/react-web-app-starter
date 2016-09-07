@@ -4,14 +4,14 @@ import findIndex from 'lodash/findIndex';
 
 // todos: [{
 //   text: '测试1',
-//   id: '001',
-//   complete: false,
-//   delete: false
+//   _id: '001',
+//   isCompleted: false,
+//   isDeleted: false
 // }, {
 //   text: '测试2',
-//   id: '002'
-//   complete: false,
-//   delete: false
+//   _id: '002'
+//   isCompleted: false,
+//   isDeleted: false
 // }],
 
 let initState = {
@@ -65,9 +65,9 @@ export default function todoReducer(state = initState, action) {
       if (!toggledTodoId) {
         return state;
       }
-      const indexOfToggleTodo = findIndex(state.todos, (todo) => todo.id.toString() === toggledTodoId.toString());
+      const indexOfToggleTodo = findIndex(state.todos, (todo) => todo._id.toString() === toggledTodoId.toString());
       const targetTodo = state.todos[indexOfToggleTodo];
-      targetTodo.complete = !targetTodo.complete;
+      targetTodo.isCompleted = !targetTodo.isCompleted;
       return {
         ...state,
         todos: [...state.todos.slice(0, indexOfToggleTodo), targetTodo, ...state.todos.slice(indexOfToggleTodo + 1)],
@@ -86,9 +86,9 @@ export default function todoReducer(state = initState, action) {
       if (!deletedTodoId) {
         return state;
       }
-      const indexOfDeletedTodo = findIndex(state.todos, (todo) => todo.id.toString() === deletedTodoId.toString());
+      const indexOfDeletedTodo = findIndex(state.todos, (todo) => todo._id.toString() === deletedTodoId.toString());
       const deletedTodo = state.todos[indexOfDeletedTodo];
-      deletedTodo.delete = !deletedTodo.delete;
+      deletedTodo.isDeleted = !deletedTodo.isDeleted;
       return {
         ...state,
         todos: [...state.todos.slice(0, indexOfDeletedTodo), deletedTodo, ...state.todos.slice(indexOfDeletedTodo + 1)],
