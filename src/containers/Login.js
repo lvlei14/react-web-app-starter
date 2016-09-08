@@ -22,6 +22,7 @@ class Login extends React.Component {
     this.handleUsernameInput = this.handleUsernameInput.bind(this);
     this.handlePasswordInput = this.handlePasswordInput.bind(this);
     this.login = this.login.bind(this);
+    this.register = this.register.bind(this);
 
     this.state = {
       username: '',
@@ -76,6 +77,10 @@ class Login extends React.Component {
     }
   }
 
+  register() {
+    history.replace('/register');
+  }
+
   render () {
     return (
       <div>
@@ -108,6 +113,11 @@ class Login extends React.Component {
             fullWidth={true}
             primary={true}
             onClick={this.login}
+            style={{marginTop: "17px"}}/>
+          <RaisedButton
+            label="注册"
+            fullWidth={true}
+            onClick={this.register}
             style={{marginTop: "17px"}}/>
         </Paper>
       </div>
