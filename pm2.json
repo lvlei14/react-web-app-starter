@@ -3,7 +3,7 @@
     "watch"      : false,
     "name"       : "worker-partner-web",
     "script"     : "./bin/index.js",
-    "args"       : "build 8000 /index.html http://127.0.0.1:4000",
+    "args"       : "build 8000 /index.html http://127.0.0.1:7293",
     "env": {
       "NODE_PATH": "bin/",
       "NODE_ENV": "production",
